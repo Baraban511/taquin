@@ -1,0 +1,37 @@
+{
+  "name": "taquin",
+  "version": "3.0.0",
+  "private": true,
+  "homepage": "https://taquin.tech",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "npm run build && wrangler pages dev",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
+    "deploy": "npm run build && wrangler pages deploy"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-cloudflare": "^4.6.1",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@tailwindcss/forms": "^0.5.7",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.39",
+    "svelte": "^4.2.7",
+    "svelte-check": "^3.6.0",
+    "tailwindcss": "^3.4.6",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.3",
+    "wrangler": "^3.66.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "@tabler/icons-svelte": "^3.3.0",
+    "cheerio": "^1.0.0-rc.12",
+    "cssnano": "^7.0.2",
+    "ics": "^3.7.2",
+    "luxon": "^3.4.4",
+    "resend": "^3.4.0"
+  }
+}
