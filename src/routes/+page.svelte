@@ -12,14 +12,14 @@
 	import { slide, blur, fly } from "svelte/transition";
 	import { tweened } from "svelte/motion";
 	import { cubicOut } from "svelte/easing";
-	import {
-		IconX,
-		IconCircleDashed,
-		IconCheck,
-		IconEye,
-		IconEyeOff,
-		IconUpload,
-	} from "@tabler/icons-svelte";
+	//Icons
+	import TablerX from "~icons/tabler/x";
+	import TablerCircleDashed from "~icons/tabler/circle-dashed";
+	import TablerCheck from "~icons/tabler/check";
+	import TablerEye from "~icons/tabler/eye";
+	import TablerEyeOff from "~icons/tabler/eye-off";
+	import TablerUpload from "~icons/tabler/upload";
+	//Icons end
 	export let data;
 	export let form;
 
@@ -68,11 +68,10 @@
 		</p>
 	</div>
 </noscript>
-
 <div
 	class="dark:bg-gray-900 min-w-screen min-h-screen text-center dark:text-white"
 >
-	<Progress step = {data.step}/>
+	<Progress step={data.step} />
 	<div class="border-2 dark:border-gray-700 mx-5 rounded">
 		<!--Connexion form-->
 		{#if !data?.step}
@@ -141,11 +140,13 @@
 											: (password = "password")}
 								>
 									{#if password === "password"}
-										<IconEye
-											class="dark:text-white dark:bg-gray-700 bg-gray-50"
+										<TablerEye
+											class="dark:text-white dark:bg-gray-700 bg-gray-50 text-xl "
 										/>
 									{:else}
-										<IconEyeOff class="dark:text-white" />
+										<TablerEyeOff
+											class="dark:text-white text-xl"
+										/>
 									{/if}</button
 								>
 							</div>
@@ -156,7 +157,7 @@
 						class="text-white flex items-center justify-center w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 						disabled={loading}
 						>{#if loading}
-							<IconCircleDashed class="animate-spin h-5 w-5" />
+							<TablerCircleDashed class="animate-spin h-5 w-5" />
 						{:else}
 							Se connecter
 						{/if}</button
@@ -214,7 +215,7 @@
 						disabled={loading}
 					>
 						{#if loading}
-							<IconCircleDashed class="animate-spin h-5 w-5" />
+							<TablerCircleDashed class="animate-spin h-5 w-5" />
 						{:else}
 							Valider
 						{/if}
@@ -257,7 +258,7 @@
 					<div
 						class="flex flex-1 overflow-hidden items-center justify-center flex-col gap-4 p-2 rounded-md bg-slate-200 dark:bg-slate-800 border dark:border-gray-700 w-full"
 					>
-						<IconUpload size={90} />
+						<TablerUpload class="text-7xl" />
 						<h3 class="text-lg font-medium">
 							S'abonner manuellement avec n'importe quel
 							calendrier
@@ -275,7 +276,7 @@
 							<button
 								class="flex items-center justify-center py-1 px-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 hover:text-blue-700 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 rounded-r"
 								on:click={copy(`webcal://${data.link}`)}
-								><IconCheck
+								><TablerCheck
 									class="{clipboard
 										? ''
 										: 'hidden'} h-5 w-5 mr-3"
@@ -307,13 +308,13 @@
 			{#if data?.mail}
 				<div
 					class="flex items-center justify-center gap-2 p-5"
-					transition:blur
+					transition:slide
 				>
 					<img src={wavingHand} alt="Waving Hand" class="w-16 h-16" />
 					<p class="text-4xl font-bold mt-3">Message reçu.</p>
 				</div>
 			{:else}
-				<div transition:blur><Contact /></div>
+				<div transition:slide><Contact /></div>
 			{/if}
 		</div>
 	{/if}
@@ -342,7 +343,7 @@
 				class="text-gray-500 transition hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-500"
 			>
 				<span class="sr-only">Fermer la notification</span>
-				<IconX size={24} />
+				<TablerX class="text-xl" />
 			</button>
 		</div>
 	</div>

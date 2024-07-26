@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { slide } from "svelte/transition";
-    import { IconCircleFilled } from "@tabler/icons-svelte";
+    import TablerCircleFilled from "~icons/tabler/circle-filled";
     let data = [];
     let error = null;
     let loading = true;
@@ -26,18 +26,20 @@
 >
     {#if loading}
         <p class="flex items-center dark:text-gray-600" transition:slide>
-            <IconCircleFilled class="p-1" />Chargement
+            <TablerCircleFilled class="p-1 text-xl" />Chargement
         </p>
     {:else if error}
         <p class="flex items-center text-red-600" transition:slide>
-            <IconCircleFilled class="p-1" />Impossible de charger le status
+            <TablerCircleFilled class="p-1 text-xl" />Impossible de charger le
+            status
         </p>
     {:else if !data.online}
         <p
             class="group-hover:hidden flex items-center text-orange-600"
             transition:slide
         >
-            <IconCircleFilled class="p-1" />EcoleDirecte subi des pertubations
+            <TablerCircleFilled class="p-1 text-xl" />EcoleDirecte subi des
+            pertubations
         </p>
         <a
             class="hidden group-hover:block text-gray-600"
@@ -51,7 +53,7 @@
             class="group-hover:hidden flex items-center text-green-600"
             transition:slide
         >
-            <IconCircleFilled class="p-1" />Systèmes opérationnels.
+            <TablerCircleFilled class="p-1 text-xl" />Systèmes opérationnels.
         </p>
         <p class="hidden group-hover:block text-gray-600">
             Temps de réponse : {data.time}ms
