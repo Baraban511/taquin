@@ -11,7 +11,6 @@
 	import { enhance } from "$app/forms";
 	import { slide, blur, fly } from "svelte/transition";
 	import { tweened } from "svelte/motion";
-	import { cubicOut } from "svelte/easing";
 	//Icons
 	import TablerX from "~icons/tabler/x";
 	import TablerCircleDashed from "~icons/tabler/circle-dashed";
@@ -24,19 +23,6 @@
 	export let form;
 
 	let password = "password";
-	let progress = tweened(0, {
-		duration: 500,
-		easing: cubicOut,
-	});
-	$: {
-		if (data?.step === "QCM") {
-			progress.set(0.5);
-		} else if (form?.step === "LINK") {
-			progress.set(1);
-		} else {
-			progress.set(0);
-		}
-	}
 	let pageTitle = "Connexion";
 	if (data?.step === "QCM") {
 		pageTitle = "Double authentification";
