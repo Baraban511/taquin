@@ -118,7 +118,7 @@ export const actions = {
 			from: `"Taquin - Contact" <contact@taquin.tech>`, // sender address
 			to: EMAIL_TO, // list of receivers
 			subject: "Contact request on taquin.tech", // Subject line
-			html: `<p>${data.get('message')}</p><code>From: ${url.origin}</code><p>${data.get('mail') ? data.get('mail') : ''}</p>`, // html body
+			html: `<p>${data.get('message')}</p><code>From: ${url.origin}</code><p>Reply to <a>${data.get('mail') ? data.get('mail') : ''}</a></p>`, // html body
 		}
 		//if (data.get('mail')) {
 		//emailData.replyTo = data.get('mail')

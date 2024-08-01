@@ -1,5 +1,5 @@
 <script>
-    import { IconChevronRight } from "@tabler/icons-svelte";
+    import TablerChevronRight from '~icons/tabler/chevron-right';
 </script>
 
 <div class="p-5">
@@ -12,10 +12,8 @@
             </p>
         </div>
         <div class="flex items-center justify-center">
-            <IconChevronRight
-                size={48}
-                stroke={2.5}
-                class="rotate-90 lg:rotate-0 text-gray-500 dark:text-gray-400"
+            <TablerChevronRight
+                class="rotate-90 lg:rotate-0 text-gray-500 dark:text-gray-400 text-5xl"
             />
         </div>
         <div class="p-2 flex-1 rounded-md bg-slate-200 dark:bg-slate-800">
@@ -27,10 +25,8 @@
             </p>
         </div>
         <div class="flex items-center justify-center">
-            <IconChevronRight
-                size={48}
-                stroke={2.5}
-                class="rotate-90 lg:rotate-0 text-gray-500 dark:text-gray-400"
+            <TablerChevronRight
+                class="rotate-90 lg:rotate-0 text-gray-500 dark:text-gray-400 text-5xl"
             />
         </div>
         <div class="p-2 flex-1 rounded-md bg-slate-200 dark:bg-slate-800">
