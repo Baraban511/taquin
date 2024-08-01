@@ -1,7 +1,7 @@
 <script>
     import { enhance } from "$app/forms";
     import { slide } from "svelte/transition";
-    import wavingHand from "$lib/assets/waving-hand.png";
+    import thumbsUp from "$lib/assets/thumbs-up.png";
     import TablerCircleDashed from "~icons/tabler/circle-dashed";
     export let mail;
     let loading = false;
@@ -9,7 +9,7 @@
 
 {#if mail === true}
     <div class="flex items-center justify-center gap-2 p-5" transition:slide>
-        <img src={wavingHand} alt="Waving Hand" class="w-16 h-16" />
+        <img src={thumbsUp} alt="Waving Hand" class="w-16 h-16" />
         <p class="text-4xl font-bold mt-3">Message reçu.</p>
     </div>
 {:else}
