@@ -182,7 +182,7 @@
                     class="flex flex-1 overflow-hidden items-center justify-center flex-col gap-4 p-2 rounded-md bg-slate-200 dark:bg-slate-800 border dark:border-gray-700"
                 >
                     <img
-                        class="w-20"
+                        class="w-20 mt-3"
                         alt="L'icône de Calendrier Google"
                         src={googleCalendar}
                     />
