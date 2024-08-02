@@ -50,7 +50,7 @@ export async function GET({ url }) {
 			body: body
 		}).then(response => {
 			return response.json();
-		}).then(data => {
+		}).then(async data => {
 			if (!data) {
 				throw new Error("Erreur inconnue");
 			}
@@ -97,7 +97,6 @@ export async function GET({ url }) {
 					alarms: alarm
 				});
 			}
-			console.log(feries.data[0].name);
 			for (var i = 0; i < feries.data.length; i++) {
 				let startDate = DateTime.fromISO(feries.data[i].startDate).setZone("Europe/Paris");
 				let endDate = startDate.plus({ day: 1 });
