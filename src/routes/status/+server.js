@@ -9,6 +9,9 @@ export async function GET() {
     }
     catch (e) {
         console.error(e);
+        return json({
+            online: false,
+        });
         return new Response('offline', { status: 503 });
     }
 }

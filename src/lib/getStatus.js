@@ -1,3 +1,5 @@
+
+import { env } from '$env/dynamic/private';
 import * as cheerio from 'cheerio';
 export default async function getStatus() {
     try {
@@ -13,10 +15,12 @@ export default async function getStatus() {
 
         var apiTime = titles[1];
         apiTime = apiTime.replace(/\D/g, "");
+        env.STATUS = "online";
         return apiTime;
     }
     catch (e) {
         console.error(e);
+        env.STATUS = "offline";
         throw new Error(e);
     }
 }

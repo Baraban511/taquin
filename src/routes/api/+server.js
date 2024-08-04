@@ -4,9 +4,7 @@ import * as ics from 'ics'
 import { DateTime } from "luxon";
 
 export async function GET({ url }) {
-	const feries = await getFeries();
 	const password = await decrypt(url.searchParams.get('pass'), url.searchParams.get('iv'));
-	console.log(password)
 	var cn = decodeURIComponent(url.searchParams.get('cn'));
 	var cv = decodeURIComponent(url.searchParams.get('cv'));
 	const login = url.searchParams.get('id');
@@ -52,14 +50,16 @@ export async function GET({ url }) {
 			body: body
 		}).then(response => {
 			return response.json();
-		}).then(data => {
+		}).then(async data => {
 			if (!data) {
 				throw new Error("Erreur inconnue");
 			}
 			if (data.code !== 200) {
-				throw new Error(data.message || "Erreur inconnue");
+				console.error(data.message || "Erreur inconnue");
+				console.log(data);
 			}
 			var calendar = [];
+			const feries = await getFeries();
 			for (var i = 0; i < data.length; i++) {
 				if (data[i].id == 0) {
 					continue;
@@ -98,13 +98,13 @@ export async function GET({ url }) {
 				});
 			}
 			for (var i = 0; i < feries.data.length; i++) {
-				let startDate = DateTime.fromISO(feries[i][0]).setZone("Europe/Paris");
+				let startDate = DateTime.fromISO(feries.data[i].startDate).setZone("Europe/Paris");
 				let endDate = startDate.plus({ day: 1 });
 				calendar.push({
 					title: feries.data[i].name.text,
 					start: [startDate.year, startDate.month, startDate.day],
 					end: [endDate.year, endDate.month, endDate.day],
-					description: `Pas de cours !`,
+					description: `Pas de cours ! \n ${feries.data[i].nationwide ? "Pour tout le monde" : "Pas pour tous !"}`,
 					categories: ["ferie"],
 					status: "CONFIRMED",
 					calName: "Emploi du temps",
