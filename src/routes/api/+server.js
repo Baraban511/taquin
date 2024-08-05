@@ -1,4 +1,5 @@
 import { decrypt } from '$lib/cryption.js';
+import calendarError from '$lib/functions/calendarError.ts';
 import getFeries from '$lib/getFeries.js';
 import * as ics from 'ics'
 import { DateTime } from "luxon";
@@ -9,11 +10,10 @@ export async function GET({ url }) {
 	var cv = decodeURIComponent(url.searchParams.get('cv'));
 	const login = url.searchParams.get('id');
 	if (!password || !cn || !cv || !login) {
-		return new Response("Paramètres manquants", {
-			status: 400
-		});
+		throw new Error({ name: "Paramètres manquants", message: "Votre lien à été modifié. Vous pouvez le regénerer ici : https://taquin.tech" });
 	}
-	var body =
+	var calendar = [];
+	let body =
 		"data=" +
 		JSON.stringify({
 			identifiant: login,
@@ -33,6 +33,13 @@ export async function GET({ url }) {
 		return response.json();
 	}).then(async data => {
 		if (data.code !== 200) {
+			if (data.code === 505) {
+				calendar.push(calendarError({
+					name: "Mot de passe incorrect",
+					message: "Votre mot de passe est incorrect, vous pouvez actualiser votre lien ici : https://taquin.tech",
+				}));
+				return;
+			}
 			throw new Error(data.message || "Erreur inconnue");
 		}
 		var token = data.token; var id = data.data.accounts[0].id;
@@ -58,7 +65,6 @@ export async function GET({ url }) {
 				console.error(data.message || "Erreur inconnue");
 				console.log(data);
 			}
-			var calendar = [];
 			const feries = await getFeries();
 			for (var i = 0; i < data.length; i++) {
 				if (data[i].id == 0) {
@@ -77,25 +83,27 @@ export async function GET({ url }) {
 					alarm.push({ action: 'display', description: 'Cours annule', trigger: { hours: 1, before: true } });
 				}
 				let endDate = DateTime.fromISO(data[i].end_date.replace(" ", "T")).setZone("Europe/Paris");
-				calendar.push({
-					title: data[i].text,
-					start: [startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute],
-					startOutputType: 'local',
-					end: [endDate.year, endDate.month, endDate.day, endDate.hour, endDate.minute],
-					description: `Avec ${data[i].prof} en salle ${data[i].salle}`,
-					location: data[i].salle,
-					categories: [
-						"cours",
-						data[i].matiere,
-						data[i].prof,
-						data[i].salle,
-						status,
-					],
-					status: status,
-					busyStatus: busy,
-					calName: "Emploi du temps",
-					alarms: alarm
-				});
+				calendar.push(
+					{
+						title: data[i].text,
+						start: [startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute],
+						startOutputType: 'local',
+						end: [endDate.year, endDate.month, endDate.day, endDate.hour, endDate.minute],
+						description: `Avec ${data[i].prof} en salle ${data[i].salle}`,
+						location: data[i].salle,
+						categories: [
+							"cours",
+							data[i].matiere,
+							data[i].prof,
+							data[i].salle,
+							status,
+						],
+						status: status,
+						busyStatus: busy,
+						calName: "Emploi du temps",
+						alarms: alarm
+					}
+				);
 			}
 			for (var i = 0; i < feries.data.length; i++) {
 				let startDate = DateTime.fromISO(feries.data[i].startDate).setZone("Europe/Paris");
@@ -131,8 +139,73 @@ export async function GET({ url }) {
 		});
 	}).catch(error => {
 		console.error(error);
+
 		return new Response(error, {
 			status: 500
 		});
 	});
+}
+
+async function getIdToken(body) {
+	try {
+		let response = await fetch('https://api.ecoledirecte.com/v3/login.awp?v=3', {
+			method: 'POST',
+			headers: {
+				"Content-Type": "text/plain",
+				"User-Agent":
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0",
+			},
+			body: body
+		})
+		response = await response.json();
+		console.log(response);
+		if (response.code !== 200) {
+			if (data.code === 505) {
+				throw new Error({
+					name: "Mot de passe incorrect",
+					message: "Votre mot de passe est incorrect, vous pouvez actualiser votre lien ici : https://taquin.tech",
+				});
+			}
+			throw new Error(response.message || "Erreur inconnue");
+		}
+		else {
+			return {
+				id: response.data.accounts[0].id,
+				token: response.token
+			}
+		}
+	}
+	catch (e) {
+		console.error(e);
+		throw new Error(e);
+	}
+}
+async function getEDT(IdToken) {
+	try {
+		let now = DateTime.now().setZone("Europe/Paris");
+		let body = "data=" + JSON.stringify({ "dateDebut": now.toISODate(), "dateFin": now.plus({ days: 10 }).toISODate() });
+		let response = await fetch('https://api.ecoledirecte.com/v3/E/' + IdToken.id + '/emploidutemps.awp?verbe=get', {
+			method: 'POST',
+			headers: {
+				"Content-Type": "text/plain",
+				"User-Agent":
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0",
+				"x-token": IdToken.token
+			},
+			body: body
+		})
+		response = await response.json();
+		console.log(response);
+		if (response.code !== 200) {
+			console.error(response || "Erreur inconnue");
+			throw new Error(response.message || "Erreur inconnue");
+		}
+		else {
+			return response;
+		}
+	}
+	catch (e) {
+		console.error(e);
+		throw new Error(e);
+	}
 }
