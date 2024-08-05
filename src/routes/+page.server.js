@@ -5,18 +5,20 @@ import createLink from '$lib/createLink.js';
 import sendEmail from '$lib/sendEmail.js'
 import { fail } from '@sveltejs/kit';
 import { EMAIL_TO } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 export function load({ cookies }, form) {
+	let loadData = new Object;
 	let sessionCookie = cookies.get('sessionCookie');
 
 	if (sessionCookie) {
-		sessionCookie = decodeCookie(sessionCookie);
+		loadData = decodeCookie(sessionCookie);
 		if (import.meta.env.DEV) {
 			console.log(sessionCookie);
 		}
-		return sessionCookie;
-
 	}
+	loadData.status = env.STATUS;
+	return loadData;
 }
 
 export const actions = {

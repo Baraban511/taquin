@@ -101,10 +101,10 @@ export async function GET({ url }) {
 				let startDate = DateTime.fromISO(feries.data[i].startDate).setZone("Europe/Paris");
 				let endDate = startDate.plus({ day: 1 });
 				calendar.push({
-					title: feries.data[i].name.text,
+					title: feries.data[0].name[0].text,
 					start: [startDate.year, startDate.month, startDate.day],
 					end: [endDate.year, endDate.month, endDate.day],
-					description: `Pas de cours ! \n ${feries.data[i].nationwide ? "Pour tout le monde" : "Pas pour tous !"}`,
+					description: `Pas de cours !\n${feries.data[i].nationwide ? "Pour tout le monde" : "Pas pour tous !"}`,
 					categories: ["ferie"],
 					status: "CONFIRMED",
 					calName: "Emploi du temps",
