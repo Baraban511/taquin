@@ -21,6 +21,14 @@
 		{ component: Functionalities },
 		{ component: Faq },
 	];
+	$: if (data?.status === "offline") {
+		Components = [
+		{ component: Header },
+		{ component: HowItWorks },
+		{ component: Functionalities },
+		{ component: Faq },
+	];
+	}
 	$: if (data?.step === "QCM") {
 		Components = [{ component: ConnexionBox, props: { data } }];
 	}

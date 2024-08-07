@@ -173,3 +173,30 @@ function createCalendar(events) {
 	calendar = lines.join('\n');
 	return calendar;
 }
+
+function getHomeworks(IdToken) {
+	let now = DateTime.now().setZone("Europe/Paris");
+	let headers = {
+		"Content-Type": "text/plain",
+		"User-Agent":
+			"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/119.0",
+		"x-token": IdToken.token
+	};
+
+	const homeworks1 = fetch(`https://api.ecoledirecte.com/v3/Eleves/${IdToken.id}/cahierdetexte/${now.toISODate()}.awp`, {
+		headers,
+	}).then(response => response.json());
+	const homeworks2 = fetch(`https://api.ecoledirecte.com/v3/Eleves/${IdToken.id}/cahierdetexte/${now.plus({ day: 1 }).toISODate()}.awp`, {
+		headers,
+	}).then(response => response.json());
+	Promise.all([homeworks1, homeworks2])
+		.then(([homeworks1, homeworks2]) => {
+			return {
+				homeworks1,
+				homeworks2
+			}
+		})
+		.catch(error => {
+			console.error(error);
+		});
+}
