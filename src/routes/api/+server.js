@@ -87,6 +87,9 @@ async function getEDT(IdToken) {
 		})
 		response = await response.json();
 		if (response.code !== 200) {
+			if (response.code === 403) {
+				return [];
+			}
 			console.error(response || "Erreur inconnue");
 			throw new Error(response.message || "Erreur inconnue");
 		}
@@ -146,7 +149,7 @@ function createPublicHolidaysEvents(publicHolidays) {
 		let startDate = DateTime.fromISO(publicHolidays.data[i].startDate).setZone("Europe/Paris");
 		let endDate = startDate.plus({ day: 1 });
 		publicHolidaysEvent.push({
-			title: publicHolidays.data[0].name[0].text,
+			title: publicHolidays.data[i].name[0].text,
 			start: [startDate.year, startDate.month, startDate.day],
 			end: [endDate.year, endDate.month, endDate.day],
 			description: `Pas de cours !\n${publicHolidays.data[i].nationwide ? "Pour tout le monde" : "Pas pour tous !"}`,

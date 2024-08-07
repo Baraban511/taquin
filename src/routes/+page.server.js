@@ -14,7 +14,7 @@ export function load({ cookies }, form) {
 	if (sessionCookie) {
 		loadData = decodeCookie(sessionCookie);
 		if (import.meta.env.DEV) {
-			console.log(sessionCookie);
+			console.log(loadData);
 		}
 	}
 	loadData.status = env.STATUS;
