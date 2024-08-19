@@ -21,6 +21,14 @@
 		{ component: Functionalities },
 		{ component: Faq },
 	];
+	$: if (data?.status === "offline") {
+		Components = [
+		{ component: Header },
+		{ component: HowItWorks },
+		{ component: Functionalities },
+		{ component: Faq },
+	];
+	}
 	$: if (data?.step === "QCM") {
 		Components = [{ component: ConnexionBox, props: { data } }];
 	}
@@ -57,7 +65,6 @@
 	class="dark:bg-gray-900 min-w-screen min-h-screen text-center dark:text-white"
 >
 	<Progress step={data.step} />
-
 	{#each Components as { component: Component, props = { } }, key (Component) }
 	<div animate:flip>	
 	<svelte:component this={Component} {...props}/>
