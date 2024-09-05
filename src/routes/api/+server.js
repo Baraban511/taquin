@@ -123,8 +123,6 @@ function createTimetableEvents(timetable) {
 			{
 				title: timetable[i].text,
 				start: [startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute],
-				startInputType: 'local',
-				startOutputType: 'local',
 				end: [endDate.year, endDate.month, endDate.day, endDate.hour, endDate.minute],
 				description: `Avec ${timetable[i].prof} en salle ${timetable[i].salle}`,
 				location: timetable[i].salle,

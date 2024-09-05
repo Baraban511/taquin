@@ -8,5 +8,6 @@ let errorEndDate = errorStartDate.plus({day: 1});
         end: [errorEndDate.year, errorEndDate.month, errorEndDate.day],
         description: `Il semblerait qu'on ait un problème : ${error.message}`,
         calName: "Emploi du temps",
+        busy: 'free',
     };
 }
