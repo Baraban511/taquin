@@ -24,16 +24,16 @@ export async function GET({ url }) {
 				cv: cv
 			});
 		events = events.concat(createPublicHolidaysEvents(publicHolidays));
-
-		let EDT = await getEDT(await getIdToken(body), publicHolidays);
-		events = events.concat(createEDTEvents(EDT));
+		
+		let timetable = await getTimetable(await getIdToken(body));
+		let timetableEvents = createTimetableEvents(timetable);
+		events = events.concat(timetableEvents);
 	}
 	catch (error) {
 		console.error(error);
 		events = events.concat(calendarError(error));
 	}
 	finally {
-		console.log(events)
 		return new Response(createCalendar(events), {
 			headers: {
 				'Content-Type': 'ics'
@@ -71,11 +71,11 @@ async function getIdToken(body) {
 		throw new Error(e);
 	}
 }
-async function getEDT(IdToken) {
+async function getTimetable(IdToken) {
 	try {
 		let now = DateTime.now().setZone("Europe/Paris");
 		let body = "data=" + JSON.stringify({ "dateDebut": now.toISODate(), "dateFin": now.plus({ days: 10 }).toISODate() });
-		let response = await fetch('https://api.ecoledirecte.com/v3/E/' + IdToken.id + '/emploidutemps.awp?verbe=get', {
+		let timetable = await fetch('https://api.ecoledirecte.com/v3/E/' + IdToken.id + '/emploidutemps.awp?verbe=get', {
 			method: 'POST',
 			headers: {
 				"Content-Type": "text/plain",
@@ -85,53 +85,53 @@ async function getEDT(IdToken) {
 			},
 			body: body
 		})
-		response = await response.json();
-		if (response.code !== 200) {
-			if (response.code === 403) {
+		timetable = await timetable.json();
+		if (timetable.code !== 200) {
+			if (timetable.code === 403) {
 				return [];
 			}
-			console.error(response || "Erreur inconnue");
-			throw new Error(response.message || "Erreur inconnue");
+			console.error(timetable || "Erreur inconnue");
+			throw new Error(timetable.message || "Erreur inconnue");
 		}
-		return response;
+		return timetable.data;
 	}
 	catch (e) {
 		throw new Error(e);
 	}
 }
 
-function createEDTEvents(EDT, publicHolidays) {
-	let EDTEvents = []
-	for (var i = 0; i < EDT.length; i++) {
-		if (EDT[i].id == 0) {
+function createTimetableEvents(timetable) {
+	let timetableEvents = []
+	for (var i = 0; i < timetable.length; i++) {
+		if (timetable[i].id == 0) {
 			continue;
 		}
 		let status = "CONFIRMED";
 		let busy = "BUSY";
 		let alarm = [];
-		let startDate = DateTime.fromISO(EDT[i].start_date.replace(" ", "T")).setZone("Europe/Paris");
-		if (publicHolidays.dates.includes(startDate.toISODate())) {
-			continue;
-		}
-		if (EDT[i].isAnnule) {
+		let startDate = DateTime.fromISO(timetable[i].start_date.replace(" ", "T")).setZone("Europe/Paris");
+		// if (publicHolidays.dates.includes(startDate.toISODate())) {
+		// 	continue;
+		// }
+		if (timetable[i].isAnnule) {
 			status = "CANCELLED";
 			busy = "FREE";
 			alarm.push({ action: 'display', description: 'Cours annule', trigger: { hours: 1, before: true } });
 		}
-		let endDate = DateTime.fromISO(EDT[i].end_date.replace(" ", "T")).setZone("Europe/Paris");
-		EDTEvents.push(
+		let endDate = DateTime.fromISO(timetable[i].end_date.replace(" ", "T")).setZone("Europe/Paris");
+		timetableEvents.push(
 			{
-				title: EDT[i].text,
+				title: timetable[i].text,
 				start: [startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute],
 				startOutputType: 'local',
 				end: [endDate.year, endDate.month, endDate.day, endDate.hour, endDate.minute],
-				description: `Avec ${EDT[i].prof} en salle ${EDT[i].salle}`,
-				location: EDT[i].salle,
+				description: `Avec ${timetable[i].prof} en salle ${timetable[i].salle}`,
+				location: timetable[i].salle,
 				categories: [
 					"cours",
-					EDT[i].matiere,
-					EDT[i].prof,
-					EDT[i].salle,
+					timetable[i].matiere,
+					timetable[i].prof,
+					timetable[i].salle,
 					status,
 				],
 				status: status,
@@ -141,18 +141,21 @@ function createEDTEvents(EDT, publicHolidays) {
 			}
 		);
 	}
-	return EDTEvents;
+	return timetableEvents;
 }
 function createPublicHolidaysEvents(publicHolidays) {
 	var publicHolidaysEvent = []
 	for (var i = 0; i < publicHolidays.data.length; i++) {
+		if (publicHolidays.data[i].nationwide === false) {
+			continue;
+		}
 		let startDate = DateTime.fromISO(publicHolidays.data[i].startDate).setZone("Europe/Paris");
 		let endDate = startDate.plus({ day: 1 });
 		publicHolidaysEvent.push({
 			title: publicHolidays.data[i].name[0].text,
 			start: [startDate.year, startDate.month, startDate.day],
 			end: [endDate.year, endDate.month, endDate.day],
-			description: `Pas de cours !\n${publicHolidays.data[i].nationwide ? "Pour tout le monde" : "Pas pour tous !"}`,
+			description: `Pas de cours !`,
 			categories: ["ferie"],
 			status: "CONFIRMED",
 			calName: "Emploi du temps",
