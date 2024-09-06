@@ -3,18 +3,21 @@ import calendarError from '$lib/functions/calendarError.ts';
 import getPublicHolidays from '$lib/getPublicHolidays.js';
 import * as ics from 'ics'
 import { DateTime } from "luxon";
+import { redirect } from '@sveltejs/kit';
 
 export async function GET({ url }) {
 	var events = []
 	const publicHolidays = await getPublicHolidays();
 	try {
-		let password = await decrypt(url.searchParams.get('pass'), url.searchParams.get('iv'));
+		let password = url.searchParams.get('pass');
+		let iv = url.searchParams.get('iv');
 		let login = url.searchParams.get('id');
 		let cn = decodeURIComponent(url.searchParams.get('cn'));
 		let cv = decodeURIComponent(url.searchParams.get('cv'));
 		if (!password || !cn || !cv || !login) {
-			throw new Error({ name: "Paramètres manquants", message: "Votre lien à été modifié. Vous pouvez le regénerer ici : https://taquin.tech" });
+			throw redirect(302, '/');
 		}
+		password = await decrypt(password, iv);
 		let body =
 			"data=" +
 			JSON.stringify({
@@ -24,7 +27,7 @@ export async function GET({ url }) {
 				cv: cv
 			});
 		events = events.concat(createPublicHolidaysEvents(publicHolidays));
-		
+
 		let timetable = await getTimetable(await getIdToken(body));
 		let timetableEvents = createTimetableEvents(timetable);
 		events = events.concat(timetableEvents);
@@ -109,7 +112,7 @@ function createTimetableEvents(timetable) {
 		let status = "CONFIRMED";
 		let busy = "BUSY";
 		let alarm = [];
-		let startDate = DateTime.fromISO(timetable[i].start_date.replace(" ", "T")).setZone("Europe/Paris");
+		let startDate = DateTime.fromISO(timetable[i].start_date.replace(" ", "T")).setZone("Europe/Paris").toUTC();
 		// if (publicHolidays.dates.includes(startDate.toISODate())) {
 		// 	continue;
 		// }
@@ -118,12 +121,14 @@ function createTimetableEvents(timetable) {
 			busy = "FREE";
 			alarm.push({ action: 'display', description: 'Cours annule', trigger: { hours: 1, before: true } });
 		}
-		let endDate = DateTime.fromISO(timetable[i].end_date.replace(" ", "T")).setZone("Europe/Paris");
+		let endDate = DateTime.fromISO(timetable[i].end_date.replace(" ", "T")).setZone("Europe/Paris").toUTC();
 		timetableEvents.push(
 			{
 				title: timetable[i].text,
 				start: [startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute],
 				end: [endDate.year, endDate.month, endDate.day, endDate.hour, endDate.minute],
+				startInputType: 'utc',
+				endInputType: 'utc',
 				description: `Avec ${timetable[i].prof} en salle ${timetable[i].salle}`,
 				location: timetable[i].salle,
 				categories: [
