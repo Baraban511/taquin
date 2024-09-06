@@ -112,7 +112,7 @@ function createTimetableEvents(timetable) {
 		let status = "CONFIRMED";
 		let busy = "BUSY";
 		let alarm = [];
-		let startDate = DateTime.fromISO(timetable[i].start_date.replace(" ", "T")).setZone("Europe/Paris");
+		let startDate = DateTime.fromISO(timetable[i].start_date.replace(" ", "T")).setZone("Europe/Paris").toUTC();
 		// if (publicHolidays.dates.includes(startDate.toISODate())) {
 		// 	continue;
 		// }
@@ -121,13 +121,14 @@ function createTimetableEvents(timetable) {
 			busy = "FREE";
 			alarm.push({ action: 'display', description: 'Cours annule', trigger: { hours: 1, before: true } });
 		}
-		let endDate = DateTime.fromISO(timetable[i].end_date.replace(" ", "T")).setZone("Europe/Paris");
+		let endDate = DateTime.fromISO(timetable[i].end_date.replace(" ", "T")).setZone("Europe/Paris").toUTC();
 		timetableEvents.push(
 			{
 				title: timetable[i].text,
 				start: [startDate.year, startDate.month, startDate.day, startDate.hour, startDate.minute],
+				startInputType: 'utc',
+				startOutputType: 'local',
 				end: [endDate.year, endDate.month, endDate.day, endDate.hour, endDate.minute],
-				startOutputType: "local",
 				description: `Avec ${timetable[i].prof} en salle ${timetable[i].salle}`,
 				location: timetable[i].salle,
 				categories: [
