@@ -77,7 +77,7 @@ async function getIdToken(body) {
 async function getTimetable(IdToken) {
 	try {
 		let now = DateTime.now().setZone("Europe/Paris");
-		let body = "data=" + JSON.stringify({ "dateDebut": now.toISODate(), "dateFin": now.plus({ days: 10 }).toISODate() });
+		let body = "data=" + JSON.stringify({ "dateDebut": now.toISODate(), "dateFin": now.plus({ weeks:1 }).toISODate() });
 		let timetable = await fetch('https://api.ecoledirecte.com/v3/E/' + IdToken.id + '/emploidutemps.awp?verbe=get', {
 			method: 'POST',
 			headers: {
