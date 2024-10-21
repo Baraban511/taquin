@@ -25,7 +25,7 @@
     "typescript": "^5.0.0",
     "unplugin-icons": "^0.19.0",
     "@iconify-json/fluent": "^1.1.59",
-    "@iconify-json/tabler": "^1.1.118",
+    "@iconify-json/tabler": "^1.2.5",
     "wrangler": "^3.67.1"
   },
   "type": "module",
