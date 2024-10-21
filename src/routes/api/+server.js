@@ -207,3 +207,23 @@ function getHomeworks(IdToken) {
 			console.error(error);
 		});
 }
+
+async function getHolidays(codeUAI) {
+	const zoneA = ["Besançon", "Bordeaux", "Clermont-Ferrand", "Dijon", "Grenoble", "Limoges", "Lyon", "Poitiers"];
+	const zoneB = ["Aix-Marseille", "Amiens", "Lille", "Nancy-Metz", "Nantes", "Nice", "Normandie", "Orléans-Tours", "Reims", "Rennes", "Strasbourg"];
+	const zoneC = ["Créteil", "Montpellier", "Paris", "Toulouse", "Versailles"];
+	var lycee = await (await fetch(`https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-annuaire-education/records?lang=fr&where=identifiant_de_l_etablissement%20LIKE%20'${codeUAI}'`)).json();
+	console.log(lycee.libelle_academie);
+	if (zoneA.includes(lycee.libelle_academie)) {
+		return "A";
+	}
+	if (zoneB.includes(lycee.libelle_academie)) {
+		return "B";
+	}
+	if (zoneC.includes(lycee.libelle_academie)) {
+		return "C";
+	}
+	else {
+		return null;
+	}
+}
