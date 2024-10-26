@@ -4,6 +4,10 @@ import getPublicHolidays from '$lib/getPublicHolidays.js';
 import * as ics from 'ics'
 import { DateTime } from "luxon";
 import { redirect } from '@sveltejs/kit';
+const zoneA = ["Besançon", "Bordeaux", "Clermont-Ferrand", "Dijon", "Grenoble", "Limoges", "Lyon", "Poitiers"];
+const zoneB = ["Aix-Marseille", "Amiens", "Lille", "Nancy-Metz", "Nantes", "Nice", "Normandie", "Orléans-Tours", "Reims", "Rennes", "Strasbourg"];
+const zoneC = ["Créteil", "Montpellier", "Paris", "Toulouse", "Versailles"];
+
 
 export async function GET({ url }) {
 	var events = []
@@ -176,7 +180,7 @@ function createCalendar(events) {
 		return value;
 	})
 	let lines = calendar.split('\n');
-	lines.splice(6, 0, 'X-WR-TIMEZONE:Europe/Paris');
+	lines.splice(6, 0, 'X-WR-TIMEZONE:Europe/Paris \n X-WR-CALDESC:Emploi du temps');
 	calendar = lines.join('\n');
 	return calendar;
 }
@@ -209,18 +213,19 @@ function getHomeworks(IdToken) {
 }
 
 async function getHolidays(codeUAI) {
-	const zoneA = ["Besançon", "Bordeaux", "Clermont-Ferrand", "Dijon", "Grenoble", "Limoges", "Lyon", "Poitiers"];
-	const zoneB = ["Aix-Marseille", "Amiens", "Lille", "Nancy-Metz", "Nantes", "Nice", "Normandie", "Orléans-Tours", "Reims", "Rennes", "Strasbourg"];
-	const zoneC = ["Créteil", "Montpellier", "Paris", "Toulouse", "Versailles"];
 	var lycee = await (await fetch(`https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-annuaire-education/records?lang=fr&where=identifiant_de_l_etablissement%20LIKE%20'${codeUAI}'`)).json();
 	console.log(lycee.libelle_academie);
 	if (zoneA.includes(lycee.libelle_academie)) {
+		let holidays = await (await fetch("https://www.data.gouv.fr/fr/datasets/r/ee16d126-af0f-4b3b-84d3-080ef8bc0abd")).text();
+		console.log(holidays);
 		return "A";
 	}
 	if (zoneB.includes(lycee.libelle_academie)) {
+		let holidays = await (await fetch("https://www.data.gouv.fr/fr/datasets/r/c03b7373-6698-4e44-b5f1-9408b4b2cfe8")).text();
 		return "B";
 	}
 	if (zoneC.includes(lycee.libelle_academie)) {
+		let holidays = await (await fetch("https://www.data.gouv.fr/fr/datasets/r/c594ee20-e694-4f30-810d-752acdf69d70")).text();
 		return "C";
 	}
 	else {
