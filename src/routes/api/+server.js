@@ -15,24 +15,25 @@ export async function GET({ url }) {
 	try {
 		let password = url.searchParams.get('pass');
 		let iv = url.searchParams.get('iv');
-		let login = url.searchParams.get('id');
+		let id = url.searchParams.get('id');
 		let cn = decodeURIComponent(url.searchParams.get('cn'));
 		let cv = decodeURIComponent(url.searchParams.get('cv'));
-		if (!password || !cn || !cv || !login) {
+		if (!password || !cn || !cv || !id) {
 			throw redirect(302, '/');
 		}
 		password = await decrypt(password, iv);
 		let body =
 			"data=" +
 			JSON.stringify({
-				identifiant: login,
+				identifiant: id,
 				motdepasse: password,
 				cn: cn,
 				cv: cv
 			});
+		const login = await getLogin(body);
 		events = events.concat(createPublicHolidaysEvents(publicHolidays));
 
-		let timetable = await getTimetable(await getIdToken(body));
+		let timetable = await getTimetable(login);
 		let timetableEvents = createTimetableEvents(timetable);
 		events = events.concat(timetableEvents);
 	}
@@ -49,7 +50,7 @@ export async function GET({ url }) {
 	}
 }
 
-async function getIdToken(body) {
+async function getLogin(body) {
 	try {
 		let response = await fetch('https://api.ecoledirecte.com/v3/login.awp?v=3', {
 			method: 'POST',
@@ -70,7 +71,8 @@ async function getIdToken(body) {
 		}
 		return {
 			id: response.data.accounts[0].id,
-			token: response.token
+			token: response.token,
+			UAI: response.data.accounts[0].profile.rneEtablissement
 		}
 	}
 	catch (e) {
@@ -211,24 +213,45 @@ function getHomeworks(IdToken) {
 			console.error(error);
 		});
 }
-
+/**
+ * Fetches the holiday data for a given educational institution based on its UAI code.
+ *
+ * @param {string} codeUAI - The UAI code of the educational institution.
+ * @returns {Promise<string|null>} A promise that resolves to the holiday data as a string, or null if the institution's academy is not found in any zone.
+ *
+ * @example
+ * getHolidays('1234567A').then(holidays => {
+ *   console.log(holidays);
+ * });
+ */
 async function getHolidays(codeUAI) {
 	var lycee = await (await fetch(`https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-annuaire-education/records?lang=fr&where=identifiant_de_l_etablissement%20LIKE%20'${codeUAI}'`)).json();
 	console.log(lycee.libelle_academie);
 	if (zoneA.includes(lycee.libelle_academie)) {
 		let holidays = await (await fetch("https://www.data.gouv.fr/fr/datasets/r/ee16d126-af0f-4b3b-84d3-080ef8bc0abd")).text();
 		console.log(holidays);
-		return "A";
+		holidays = concatenateHolidays(holidays);
+		return holidays;
 	}
 	if (zoneB.includes(lycee.libelle_academie)) {
 		let holidays = await (await fetch("https://www.data.gouv.fr/fr/datasets/r/c03b7373-6698-4e44-b5f1-9408b4b2cfe8")).text();
-		return "B";
+		holidays = concatenateHolidays(holidays);
+		return holidays;
 	}
 	if (zoneC.includes(lycee.libelle_academie)) {
 		let holidays = await (await fetch("https://www.data.gouv.fr/fr/datasets/r/c594ee20-e694-4f30-810d-752acdf69d70")).text();
-		return "C";
+		holidays = concatenateHolidays(holidays);
+		return holidays;
 	}
 	else {
-		return null;
+		return false;
 	}
+}
+
+function concatenateHolidays(holidays) {
+	let index = holidays.indexOf("BEGIN:VEVENT");
+	holidays = holidays.substring(index + substring.length);
+	let lastIndex = holidays.lastIndexOf("END:VEVENT");
+	holidays = holidays.substring(0, lastIndex + "END:VEVENT".length);
+	return holidays;
 }
