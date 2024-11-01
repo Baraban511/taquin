@@ -24,7 +24,7 @@
     "tailwindcss": "^3.4.6",
     "typescript": "^5.0.0",
     "unplugin-icons": "^0.19.3",
-    "@iconify-json/fluent": "^1.2.4",
+    "@iconify-json/fluent": "^1.2.6",
     "@iconify-json/tabler": "^1.2.5",
     "wrangler": "^3.82.0"
   },
