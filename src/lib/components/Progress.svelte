@@ -42,7 +42,7 @@
 						easing: quartInOut,
 					}}
 				>
-					Départ
+					Connexion
 				</div>
 			{/if}
 		</div>
@@ -58,12 +58,12 @@
 						easing: quartInOut,
 					}}
 				>
-					Etape
+					QCM
 				</div>
 			{/if}
 		</div>
 		<div class="text-right w-1/3">
-			<div class="py-1">Arrivé</div>
+			<div class="py-1">Calendrier</div>
 		</div>
 	</div>
 
