@@ -31,7 +31,7 @@
   "type": "module",
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
-    "cssnano": "^7.0.2",
+    "cssnano": "^7.0.6",
     "ics": "^3.7.2",
     "luxon": "^3.4.4",
     "resend": "^3.4.0"
