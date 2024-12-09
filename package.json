@@ -26,7 +26,7 @@
     "unplugin-icons": "^0.20.1",
     "@iconify-json/fluent": "^1.2.7",
     "@iconify-json/tabler": "^1.1.118",
-    "wrangler": "^3.67.1"
+    "wrangler": "^3.93.0"
   },
   "type": "module",
   "dependencies": {
