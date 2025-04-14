@@ -1,17 +1,19 @@
 <script>
+	import { run } from 'svelte/legacy';
+
 	import { tweened } from "svelte/motion";
 	import { quartInOut } from "svelte/easing";
 	import { fly } from "svelte/transition";
 	import { cubicInOut } from "svelte/easing";
 	import FluentRabbitFilled from "~icons/fluent/animal-rabbit-20-filled";
-	export let step;
-	let depart,
-		etape = true;
+	let { step } = $props();
+	let depart = $state(),
+		etape = $state(true);
 	let progress = tweened(0, {
 		duration: 1500,
 		easing: quartInOut,
 	});
-	$: {
+	run(() => {
 		if (step === "QCM") {
 			progress.set(49);
 			depart = false;
@@ -23,7 +25,7 @@
 			depart = true;
 			etape = true;
 		}
-	}
+	});
 </script>
 
 <div

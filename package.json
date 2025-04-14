@@ -2,38 +2,39 @@
   "name": "taquin",
   "version": "3.0.0",
   "private": true,
-  "homepage": "https://taquin.tech",
+  "homepage": "https://taquin.barab.me",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "preview": "npm run build && wrangler pages dev",
+    "preview": "bun run build && wrangler pages dev",
     "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
-    "deploy": "npm run build && wrangler pages deploy"
+    "deploy": "bun run build && wrangler pages deploy"
   },
   "devDependencies": {
-    "@sveltejs/adapter-cloudflare": "^4.6.1",
-    "@sveltejs/kit": "^2.11.1",
-    "@sveltejs/vite-plugin-svelte": "^3.0.0",
-    "vite": "^5.4.8",
-    "@tailwindcss/forms": "^0.5.9",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.39",
-    "svelte": "^4.2.7",
-    "svelte-check": "^4.0.5",
-    "tailwindcss": "^3.4.6",
-    "typescript": "^5.0.0",
+    "@iconify-json/fluent": "^1.2.19",
+    "@iconify-json/tabler": "^1.2.17",
+    "@sveltejs/adapter-cloudflare": "^4.9.0",
+    "@sveltejs/adapter-node": "^5.2.12",
+    "@sveltejs/kit": "^2.20.5",
+    "@sveltejs/vite-plugin-svelte": "^4.0.4",
+    "@tailwindcss/forms": "^0.5.10",
+    "autoprefixer": "^10.4.21",
+    "svelte": "^5.26.2",
+    "svelte-check": "^4.1.6",
+    "tailwindcss": "^4.1.3",
+    "typescript": "^5.8.3",
     "unplugin-icons": "^0.19.3",
-    "@iconify-json/fluent": "^1.2.4",
-    "@iconify-json/tabler": "^1.2.7",
-    "wrangler": "^3.82.0"
+    "vite": "^5.4.18",
+    "wrangler": "^3.114.5"
   },
   "type": "module",
   "dependencies": {
-    "cheerio": "^1.0.0-rc.12",
+    "@tailwindcss/vite": "^4.1.3",
+    "cheerio": "^1.0.0",
     "cssnano": "^7.0.6",
     "ics": "^3.8.1",
-    "luxon": "^3.4.4",
-    "resend": "^4.0.0"
+    "luxon": "^3.6.1",
+    "resend": "^4.2.0"
   }
 }

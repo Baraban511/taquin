@@ -2,9 +2,9 @@
     import { onMount } from "svelte";
     import { slide } from "svelte/transition";
     import TablerCircleFilled from "~icons/tabler/circle-filled";
-    let data = [];
-    let error = null;
-    let loading = true;
+    let data = $state([]);
+    let error = $state(null);
+    let loading = $state(true);
 
     onMount(async () => {
         try {

@@ -1,7 +1,7 @@
 <script>
   import Status from "$lib/components/Status.svelte";
   import calendar from "$lib/assets/calendar.png";
-  var version = process.env.VERSION;
+  var version = $state(process.env.VERSION);
   if (import.meta.env.DEV) {
     version = process.env.VERSION + "-dev";
   }

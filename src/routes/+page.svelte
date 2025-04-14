@@ -1,5 +1,5 @@
 <script>
-	import "./styles.css";
+	import { run } from 'svelte/legacy';
 	import { fly } from "svelte/transition";
 	import { tweened } from "svelte/motion";
 	import { flip } from "svelte/animate";
@@ -12,33 +12,38 @@
 	import Header from "$lib/components/Header.svelte";
 	import ConnexionBox from "$lib/components/ConnexionBox.svelte";
 	import TablerX from "~icons/tabler/x";
-	export let data;
-	export let form;
-	$: Components = [
+	let { data, form = $bindable() } = $props();
+	let Components = $derived([
 		{ component: Header },
 		{ component: ConnexionBox, props: { data } },
 		{ component: HowItWorks },
 		{ component: Functionalities },
 		{ component: Faq },
-	];
-	$: if (data?.status === "offline") {
-		Components = [
-		{ component: Header },
-		{ component: HowItWorks },
-		{ component: Functionalities },
-		{ component: Faq },
-	];
-	}
-	$: if (data?.step === "QCM") {
-		Components = [{ component: ConnexionBox, props: { data } }];
-	}
-	$: if (data?.step === "LINK") {
-		Components = [
-			{ component: ConnexionBox, props: { data } },
-			{ component: Contact, props: { mail: data?.mail } },
+	]);
+	run(() => {
+		if (data?.status === "offline") {
+			Components = [
+			{ component: Header },
+			{ component: HowItWorks },
+			{ component: Functionalities },
+			{ component: Faq },
 		];
-	}
-	let pageTitle = "Connexion";
+		}
+	});
+	run(() => {
+		if (data?.step === "QCM") {
+			Components = [{ component: ConnexionBox, props: { data } }];
+		}
+	});
+	run(() => {
+		if (data?.step === "LINK") {
+			Components = [
+				{ component: ConnexionBox, props: { data } },
+				{ component: Contact, props: { mail: data?.mail } },
+			];
+		}
+	});
+	let pageTitle = $state("Connexion");
 	if (data?.step === "QCM") {
 		pageTitle = "Double authentification";
 	}
@@ -66,8 +71,8 @@
 >
 	<Progress step={data.step} />
 	{#each Components as { component: Component, props = { } }, key (Component) }
-	<div animate:flip>	
-	<svelte:component this={Component} {...props}/>
+	<div animate:flip>
+	<Component {...props}/>
 	</div>
 	{/each}
 </div>
@@ -91,7 +96,7 @@
 			</div>
 
 			<button
-				on:click={() => (form.error = null)}
+				onclick={() => (form.error = null)}
 				class="text-gray-500 transition hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-500"
 			>
 				<span class="sr-only">Fermer la notification</span>

@@ -1,5 +1,6 @@
 <script>
-    export let data;
+    import { preventDefault } from 'svelte/legacy';
+
     import { enhance } from "$app/forms";
     import { slide } from "svelte/transition";
     import TablerEye from "~icons/tabler/eye";
@@ -8,9 +9,10 @@
 	import TablerUpload from "~icons/tabler/upload";
 	import TablerCheck from "~icons/tabler/check";
     import googleCalendar from "$lib/assets/google-calendar.png";
-    let password = "password";
-    let loading = false;
-    let clipboard = false;
+    let { data } = $props();
+    let password = $state("password");
+    let loading = $state(false);
+    let clipboard = $state(false);
     function copy(text) {
         clipboard = false;
         navigator.clipboard.writeText(text).then(() => {
@@ -80,10 +82,10 @@
                             <button
                                 type="button"
                                 class="absolute inset-y-0 end-0 grid place-content-center px-3 dark:bg-gray-700 bg-gray-50 m-0.5"
-                                on:click|preventDefault={() =>
+                                onclick={preventDefault(() =>
                                     password === "password"
                                         ? (password = "text")
-                                        : (password = "password")}
+                                        : (password = "password"))}
                             >
                                 {#if password === "password"}
                                     <TablerEye
@@ -220,7 +222,7 @@
                         </a>
                         <button
                             class="flex items-center justify-center py-1 px-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 hover:text-blue-700 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 rounded-r"
-                            on:click={copy(`webcal://${data.link}`)}
+                            onclick={copy(`webcal://${data.link}`)}
                             ><TablerCheck
                                 class="{clipboard ? '' : 'hidden'} h-5 w-5 mr-3"
                             />
