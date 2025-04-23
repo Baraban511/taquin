@@ -11,6 +11,7 @@
 	import Contact from "$lib/components/Contact.svelte";
 	import Header from "$lib/components/Header.svelte";
 	import ConnexionBox from "$lib/components/ConnexionBox.svelte";
+	import StatusBox from "$lib/components/StatusBox.svelte";
 	import TablerX from "~icons/tabler/x";
 	let { data, form = $bindable() } = $props();
 	let Components = $derived([
@@ -20,22 +21,23 @@
 		{ component: Functionalities },
 		{ component: Faq },
 	]);
-	run(() => {
+	$effect(() => {
 		if (data?.status === "offline") {
 			Components = [
 			{ component: Header },
+			{ component: StatusBox },
 			{ component: HowItWorks },
 			{ component: Functionalities },
 			{ component: Faq },
 		];
 		}
 	});
-	run(() => {
+	$effect(() => {
 		if (data?.step === "QCM") {
 			Components = [{ component: ConnexionBox, props: { data } }];
 		}
 	});
-	run(() => {
+	$effect(() => {
 		if (data?.step === "LINK") {
 			Components = [
 				{ component: ConnexionBox, props: { data } },

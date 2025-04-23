@@ -66,8 +66,8 @@
             </div>
             <p class="text-gray-500 dark:text-gray-400">
                 Pour l'instant le meilleur moyen est par mail à l'adresse <a
-                    href="mailto:contact@barab.live?subject=Contact - EDC"
-                    class="text-blue-700">contact@barab.live</a
+                    href="mailto:contact@barab.me?subject=Contact - EDC"
+                    class="text-blue-700">contact@barab.me</a
                 >
             </p>
         </div>

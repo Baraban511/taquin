@@ -1,6 +1,5 @@
 <script>
     import { preventDefault } from 'svelte/legacy';
-
     import { enhance } from "$app/forms";
     import { slide } from "svelte/transition";
     import TablerEye from "~icons/tabler/eye";
@@ -117,7 +116,7 @@
     {#if data?.step === "QCM"}
         <div transition:slide class="p-5 mb-5">
             <p class="dark:text-white text-center text-xl p-3 mb-4">
-                {data.question}
+                {data.qcm.question}
             </p>
 
             <form
@@ -135,19 +134,19 @@
                 <fieldset
                     class="flex justify-center items-center flex-wrap gap-4"
                 >
-                    {#each data.responses as responses, i}
+                    {#each data.qcm.answers as answer, i}
                         <div>
                             <label
                                 for="radio{i}"
                                 class="block cursor-pointer rounded-lg border p-4 text-sm font-medium shadow-sm has-[:checked]:border-blue-500 has-[:checked]:ring-1 has-[:checked]:ring-blue-500 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-700 border-gray-100 bg-white hover:border-gray-200"
                             >
                                 <p class="text-gray-700 dark:text-gray-200">
-                                    {responses}
+                                    {answer}
                                 </p>
                                 <input
                                     type="radio"
                                     name="answer"
-                                    value={responses}
+                                    value={answer}
                                     disabled={loading}
                                     id="radio{i}"
                                     class="sr-only"
