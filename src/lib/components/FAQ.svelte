@@ -45,29 +45,14 @@
         <div class="p-2 flex-1">
             <div class="flex items-center py-2">
                 <TablerHelpCircleFilled class="flex-shrink-0 text-xl" />
-                <p class="text-lg font-bold ml-2">
-                    Je reçois des demandes de connexions des États-Unis, est-ce
-                    vous ?
-                </p>
-            </div>
-            <p class="text-gray-500 dark:text-gray-400">
-                Nos serveurs étant hébergé par Cloudflare, EcoleDirecte les
-                localise aux États-Unis et les considère donc comme suspect.
-                Vous devez autoriser la connexion pour que nous puissions
-                récupérer votre emploi du temps
-            </p>
-        </div>
-        <div class="p-2 flex-1">
-            <div class="flex items-center py-2">
-                <TablerHelpCircleFilled class="flex-shrink-0 text-xl" />
                 <p class="text-xl font-bold ml-2">
                     Comment puis-je vous contacter ?
                 </p>
             </div>
             <p class="text-gray-500 dark:text-gray-400">
                 Pour l'instant le meilleur moyen est par mail à l'adresse <a
-                    href="mailto:contact@barab.live?subject=Contact - EDC"
-                    class="text-blue-700">contact@barab.live</a
+                    href="mailto:contact@barab.me?subject=Contact - EDC"
+                    class="text-blue-700">contact@barab.me</a
                 >
             </p>
         </div>

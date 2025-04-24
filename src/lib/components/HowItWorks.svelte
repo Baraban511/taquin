@@ -19,7 +19,7 @@
         <div class="p-2 flex-1 rounded-md bg-slate-200 dark:bg-slate-800">
             <p class="text-xl font-bold p-3">Récupérez votre lien</p>
             <p class="text-gray-500 dark:text-gray-400">
-                Copiez le lien généré et ne le partagez pas. Il continent toutes
+                Copiez le lien généré et ne le partagez pas. Il contient toutes
                 les informations nécessaires pour que nous récupérions votre
                 calendrier.
             </p>
