@@ -5,7 +5,7 @@ import { encrypt } from "$lib/functions/cryption.ts";
 import { fail } from "@sveltejs/kit";
 import { EMAIL_TO } from "$env/static/private";
 import { env } from "$env/dynamic/private";
-//import sendEmail from "$lib/sendEmail.js";
+import sendEmail from "$lib/sendEmail.js";
 
 export function load({ cookies }) {
   let loadData = new Object();
@@ -83,13 +83,18 @@ export const actions = {
         data.get("answer"),
       );
       if (resolvedqcm.code === 200) {
+        var host;
         const fa = { cn: resolvedqcm.data.cn, cv: resolvedqcm.data.cv };
         const encryptedpassword = await encrypt(sessionCookie.password);
+        if (import.meta.env.DEV) {
+          host = url.host;
+        }
         const link = generatelink(
           sessionCookie.identifiant,
           encryptedpassword.data,
           encryptedpassword.iv,
           fa,
+          host,
         );
         cookies.set(
           "sessionCookie",

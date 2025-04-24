@@ -2,7 +2,7 @@ export default function generateLink(
   identifiant: string,
   password: string,
   iv: string,
-  fa: { cv: string; cn: string } | undefined,
+  fa?: { cv: string; cn: string },
   host = "taquin.barab.me",
 ) {
   identifiant = encodeURIComponent(identifiant);
