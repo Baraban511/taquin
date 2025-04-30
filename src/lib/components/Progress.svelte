@@ -13,7 +13,7 @@
 		duration: 1500,
 		easing: quartInOut,
 	});
-	run(() => {
+	$effect(() => {
 		if (step === "QCM") {
 			progress.set(49);
 			depart = false;
@@ -44,7 +44,7 @@
 						easing: quartInOut,
 					}}
 				>
-					Départ
+				Connexion
 				</div>
 			{/if}
 		</div>
@@ -60,12 +60,12 @@
 						easing: quartInOut,
 					}}
 				>
-					Etape
+				QCM
 				</div>
 			{/if}
 		</div>
 		<div class="text-right w-1/3">
-			<div class="py-1">Arrivé</div>
+			<div class="py-1">Lien</div>
 		</div>
 	</div>
 

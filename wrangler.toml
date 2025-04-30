@@ -6,3 +6,5 @@ compatibility_flags = [ "nodejs_compat" ]
 [vars]
 API_VERSION="4.79.0"
 USER_AGENT="Mozilla/5.0 (X11; Linux x86_64; rv:137.0) Gecko/20100101 Firefox/137.0"
+PUBLIC_BANNER = false
+PUBLIC_BANNER_TEXT = "Rien d'inquiétant..."

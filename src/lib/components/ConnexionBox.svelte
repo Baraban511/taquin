@@ -13,14 +13,13 @@
     let loading = $state(false);
     let clipboard = $state(false);
     function copy(text) {
-        clipboard = false;
         navigator.clipboard.writeText(text).then(() => {
             clipboard = true;
         });
     }
 </script>
 
-<div class="border-2 dark:border-gray-700 mx-5 rounded">
+<div class="border-2 dark:border-gray-700 m-5 rounded">
     {#if !data?.step}
         <div class="p-5" transition:slide>
             <p class="dark:text-white text-center text-2xl font-bold p-3">
@@ -221,7 +220,7 @@
                         </a>
                         <button
                             class="flex items-center justify-center py-1 px-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 hover:text-blue-700 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 rounded-r"
-                            onclick={copy(`webcal://${data.link}`)}
+                            onclick={() => copy(`webcal://${data.link}`)}
                             ><TablerCheck
                                 class="{clipboard ? '' : 'hidden'} h-5 w-5 mr-3"
                             />
@@ -236,6 +235,5 @@
                 webcal://{data.link}
             </p>
         </div>
-        <!--Message d'information pour les mails de vérification-->
     {/if}
 </div>
