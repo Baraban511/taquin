@@ -42,7 +42,7 @@ export async function GET({ url }) {
     const timetable = generateTimetable(events);
     return new Response(timetable, {
       headers: {
-        "Content-Type": "ics",
+        "Content-Type": "text/calendar",
       },
     });
   }
@@ -105,6 +105,7 @@ function createTimetableEvents(timetable: Array<any>) {
       status: status,
       busyStatus: busy,
       calName: "Emploi du temps",
+      productId: "-//taquin.barab.me",
       alarms: alarm,
     });
   }
